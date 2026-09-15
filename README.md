@@ -1245,11 +1245,10 @@ No `CONTRIBUTING.md`, issue templates, or CI configuration exist. Suggested work
 
 ## License
 
-No license file is present in this repository. Without one, default copyright applies and no usage rights are granted.
+This project is licensed under the MIT License. See the `LICENSE` file for the full license text.
 
-> **TODO: Verify required configuration.** Add a `LICENSE` file.
+The Alfa Romeo owner's manual, the Alfa Romeo name, and the Biscione and Quadrifoglio marks are property of Stellantis. This project is an unaffiliated technical demonstration.
 
-Note separately that the Alfa Romeo owner's manual, the Alfa Romeo name, and the Biscione and Quadrifoglio marks are property of Stellantis. This project is an unaffiliated technical demonstration.
 
 ---
 
