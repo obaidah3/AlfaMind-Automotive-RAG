@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Giulia &middot; Technical Manual Assistant | Alfa Romeo</title>
+<meta name="description" content="Official-style RAG-powered technical manual assistant for the Alfa Romeo Giulia." />
+<meta name="theme-color" content="#090B0E" />
+<meta property="og:title" content="Giulia Technical Manual Assistant" />
+<meta property="og:description" content="Ask the Giulia owner's manual anything — instant, cited answers." />
+<meta property="og:type" content="website" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23B00F14'/%3E%3Cstop offset='1' stop-color='%2398062C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='48' fill='url(%23g)'/%3E%3Ctext x='50' y='64' font-size='46' text-anchor='middle' fill='white' font-family='Georgia,serif' font-weight='700'%3EA%3C/text%3E%3C/svg%3E" />
+
+<!-- Fonts: Big Shoulders (instrument-cluster condensed display) + Inter (UI body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+<!-- FontAwesome v6 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="brand.css" />
+</head>
+<body data-page="assistant">
+
+<nav class="site-nav">
+  <a href="home.html" class="site-nav-brand">
+    <span class="heraldic-mark" aria-hidden="true">
+      <svg width="34" height="40" viewBox="0 0 40 46" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="crestGrad" x1="0" y1="0" x2="1" y2="1"><stop class="stop1" offset="0"/><stop class="stop2" offset="1"/></linearGradient></defs>
+        <path class="crest-field" d="M20 1 L38 6 V22 C38 34 30 42 20 45 C10 42 2 34 2 22 V6 Z"/>
+        <path class="crest-outline" d="M20 1 L38 6 V22 C38 34 30 42 20 45 C10 42 2 34 2 22 V6 Z"/>
+        <rect x="18.5" y="6" width="3" height="18" fill="#F8FAFC"/>
+        <rect x="11" y="13.5" width="18" height="3" fill="#F8FAFC"/>
+        <path class="crest-serpent" d="M8 30 C 12 26, 12 34, 16 30 C 20 26, 20 34, 24 30 C 28 26, 28 32, 31 29"/>
+        <circle cx="31" cy="29" r="1.6" fill="#F8FAFC"/>
+      </svg>
+    </span>
+    <span class="brand-copy"><span class="brand-model">GIULIA</span><span class="brand-sub">Alfa Romeo &middot; Milano</span></span>
+  </a>
+  <button class="site-nav-toggle" id="navToggle" aria-label="Toggle menu"><i class="fa-solid fa-bars"></i></button>
+  <ul class="site-nav-links" id="navLinks">
+    <li><a href="home.html" data-page="home"><i class="fa-solid fa-house"></i>Home</a></li>
+    <li><a href="configurator.html" data-page="configurator"><i class="fa-solid fa-sliders"></i>Configurator</a></li>
+    <li><a href="gallery.html" data-page="gallery"><i class="fa-solid fa-images"></i>Gallery</a></li>
+    <li><a href="index.html" data-page="assistant"><i class="fa-solid fa-comment-dots"></i>Assistant</a></li>
+  </ul>
+  <a href="configurator.html" class="site-nav-cta"><i class="fa-solid fa-sliders"></i><span>Configure</span></a>
+</nav>
+
+<div class="app-shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-brand">
+      <div class="brand-mark" aria-hidden="true">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <div class="brand-copy">
+        <span class="brand-model">GIULIA</span>
+        <span class="brand-sub">Assistente Manuale Tecnico</span>
+      </div>
+      <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="heritage-strip" aria-hidden="true">
+      <span class="tri-bar tri-green"></span>
+      <span class="tri-bar tri-white"></span>
+      <span class="tri-bar tri-red"></span>
+      <span class="heritage-text">Alfa Romeo &middot; Milano &middot; dal 1910</span>
+    </div>
+
+    <!-- Hero Gallery Widget -->
+    <section class="gallery-card" aria-label="Vehicle gallery">
+      <div class="gallery-frame">
+        <img id="galleryImage" class="gallery-image" src="images/giulia-hero.jpg" alt="Alfa Romeo Giulia, exterior three-quarter view" />
+        <div class="gallery-scrim"></div>
+        <button class="gallery-nav prev" id="galleryPrev" aria-label="Previous image">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button class="gallery-nav next" id="galleryNext" aria-label="Next image">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <div class="gallery-caption">
+          <span id="galleryLabel">Esterno</span>
+          <span class="gallery-index"><span id="galleryIndex">1</span>/<span id="galleryTotal">4</span></span>
+        </div>
+      </div>
+      <div class="gallery-thumbs" id="galleryThumbs">
+        <button class="thumb active" data-index="0" data-src="images/giulia-hero.jpg" data-label="Esterno" aria-label="Exterior view">
+          <img src="images/giulia-hero.jpg" alt="" />
+        </button>
+        <button class="thumb" data-index="1" data-src="images/giulia-interior.jpg" data-label="Interni" aria-label="Interior view">
+          <img src="images/giulia-interior.jpg" alt="" />
+        </button>
+        <button class="thumb" data-index="2" data-src="images/giulia-cockpit.jpg" data-label="Cruscotto" aria-label="Cockpit view">
+          <img src="images/giulia-cockpit.jpg" alt="" />
+        </button>
+        <button class="thumb" data-index="3" data-src="images/giulia-engine.jpg" data-label="Vano Motore" aria-label="Engine bay view">
+          <img src="images/giulia-engine.jpg" alt="" />
+        </button>
+        <button class="thumb" data-index="4" data-src="images/giulia-wheel.jpg" data-label="Dettaglio Cerchio" aria-label="Wheel detail view">
+          <img src="images/giulia-wheel.jpg" alt="" />
+        </button>
+      </div>
+    </section>
+
+    <!-- DNA Drive Mode Selector -->
+    <section class="dna-card" aria-label="DNA drive mode selector">
+      <div class="dna-header">
+        <span class="dna-title">DNA Selector</span>
+        <span class="dna-status" id="dnaActiveLabel">Natural</span>
+      </div>
+      <div class="dna-pills" role="radiogroup" aria-label="Drive mode">
+        <button class="dna-pill dna-dynamic" data-mode="dynamic" role="radio" aria-checked="false">
+          <i class="fa-solid fa-bolt"></i>
+          <span>Dynamic</span>
+        </button>
+        <button class="dna-pill dna-natural active" data-mode="natural" role="radio" aria-checked="true">
+          <i class="fa-solid fa-leaf"></i>
+          <span>Natural</span>
+        </button>
+        <button class="dna-pill dna-advanced" data-mode="advanced" role="radio" aria-checked="false">
+          <i class="fa-solid fa-seedling"></i>
+          <span>Advanced Efficiency</span>
+        </button>
+        <button class="dna-pill dna-race" data-mode="race" role="radio" aria-checked="false">
+          <i class="fa-solid fa-flag-checkered"></i>
+          <span>Race</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Quick Prompts -->
+    <section class="quick-card" aria-label="Quick prompts">
+      <div class="quick-header">
+        <span class="quick-title">Quick Reference</span>
+      </div>
+      <div class="quick-chips" id="quickChips">
+        <button class="chip" data-prompt="What is the recommended tire pressure for the Giulia?">
+          <i class="fa-solid fa-gauge-high"></i> Tire Pressure Specs
+        </button>
+        <button class="chip" data-prompt="What type and grade of engine oil does the Giulia require?">
+          <i class="fa-solid fa-oil-can"></i> Engine Oil Type
+        </button>
+        <button class="chip" data-prompt="How do I set up and use Advanced Efficiency mode?">
+          <i class="fa-solid fa-seedling"></i> Advanced Efficiency Setup
+        </button>
+        <button class="chip" data-prompt="How do I inspect and top up the coolant level?">
+          <i class="fa-solid fa-temperature-half"></i> Coolant Inspection
+        </button>
+        <button class="chip" data-prompt="What is the recommended service interval for the Giulia?">
+          <i class="fa-solid fa-wrench"></i> Service Intervals
+        </button>
+      </div>
+    </section>
+
+    <!-- Backend Status -->
+    <div class="status-card">
+      <span class="status-dot" id="statusDot"></span>
+      <div class="status-copy">
+        <span class="status-label" id="statusLabel">Checking backend&hellip;</span>
+        <span class="status-sub" id="statusSub">/health</span>
+      </div>
+      <button class="status-refresh" id="statusRefresh" aria-label="Recheck connection">
+        <i class="fa-solid fa-arrows-rotate"></i>
+      </button>
+    </div>
+
+  </aside>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- ============ MAIN CHAT CANVAS ============ -->
+  <main class="chat-canvas">
+
+    <!-- Dynamic Header -->
+    <header class="chat-header">
+      <button class="menu-toggle" id="menuToggle" aria-label="Open vehicle panel">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="header-title">
+        <span class="header-model">Giulia Assistant</span>
+        <span class="header-tag">Technical Manual &middot; RAG Engine</span>
+      </div>
+      <div class="header-actions">
+        <span class="rag-badge">
+          <i class="fa-solid fa-database"></i>
+          RAG Engine &middot; 356 Pages Indexed
+        </span>
+        <button class="clear-btn" id="clearBtn">
+          <i class="fa-solid fa-trash-can"></i>
+          <span>Clear Conversation</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Chat Feed / Empty State -->
+    <div class="chat-feed" id="chatFeed">
+
+      <div class="empty-state" id="emptyState">
+        <div class="empty-emblem">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <span class="empty-eyebrow-mark">La meccanica delle emozioni</span>
+        <h1>Ask the Giulia manual anything.</h1>
+        <p>Answers are pulled directly from the official technical manual, with page citations for every claim.</p>
+
+        <div class="feature-grid">
+          <button class="feature-card" data-prompt="Explain the driving dynamics of the Giulia, including the DNA drive modes.">
+            <div class="feature-icon fi-dynamics"><i class="fa-solid fa-gauge-high"></i></div>
+            <span class="feature-title">Driving Dynamics</span>
+            <span class="feature-desc">DNA modes, chassis, suspension &amp; steering behavior</span>
+          </button>
+          <button class="feature-card" data-prompt="What is the scheduled maintenance plan for the Giulia?">
+            <div class="feature-icon fi-maintenance"><i class="fa-solid fa-oil-can"></i></div>
+            <span class="feature-title">Scheduled Maintenance</span>
+            <span class="feature-desc">Service intervals, fluids &amp; recommended checks</span>
+          </button>
+          <button class="feature-card" data-prompt="Explain the cockpit controls and infotainment layout of the Giulia.">
+            <div class="feature-icon fi-cockpit"><i class="fa-solid fa-car-side"></i></div>
+            <span class="feature-title">Cockpit Controls</span>
+            <span class="feature-desc">Instrument cluster, infotainment &amp; switchgear</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="messages" id="messages"></div>
+
+    </div>
+
+    <!-- Fixed Bottom Input Console -->
+    <div class="input-console">
+      <form class="input-bar" id="inputForm" autocomplete="off">
+        <div class="image-preview-container" id="imagePreviewContainer" hidden>
+          <img id="imagePreview" src="" alt="Selected image preview" />
+          <button type="button" class="image-preview-remove" id="removeImageBtn" aria-label="Remove image">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="input-bar-row">
+          <input type="file" id="imageInput" accept="image/*" hidden />
+          <button type="button" class="upload-btn" id="uploadBtn" aria-label="Attach an image">
+            <i class="fa-solid fa-camera"></i>
+          </button>
+          <i class="fa-solid fa-magnifying-glass input-icon"></i>
+          <textarea
+            id="questionInput"
+            rows="1"
+            placeholder="Ask about tire specs, oil type, DNA modes, warning lights&hellip;"
+            aria-label="Ask the manual a question"
+          ></textarea>
+          <button type="submit" class="send-btn" id="sendBtn" aria-label="Send question">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </form>
+      <div class="input-footnote">
+        <i class="fa-solid fa-circle-info"></i>
+        Responses are generated from the indexed owner's manual and may be incomplete &mdash; always verify safety-critical procedures with an authorized technician.
+      </div>
+    </div>
+
+    <footer class="brand-footer">
+      <span class="brand-footer-mark"><i class="fa-solid fa-shield-halved"></i> ALFA ROMEO</span>
+      <span class="brand-footer-divider">&middot;</span>
+      <span>La meccanica delle emozioni</span>
+      <span class="brand-footer-divider">&middot;</span>
+      <span class="brand-footer-version">Manual Assistant v1.0</span>
+    </footer>
+
+  </main>
+</div>
+
+<!-- Image Modal -->
+<div class="modal-overlay" id="imageModal" aria-hidden="true">
+  <div class="modal-panel">
+    <button class="modal-close" id="modalClose" aria-label="Close image">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <img id="modalImage" src="" alt="" />
+    <p class="modal-caption" id="modalCaption"></p>
+  </div>
+</div>
+
+<script src="trim-data.js"></script>
+<script src="nav.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
