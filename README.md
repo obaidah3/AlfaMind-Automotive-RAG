@@ -2,6 +2,16 @@
 
 A multimodal Retrieval-Augmented Generation (RAG) system that answers technical questions about the Alfa Romeo Giulia using the official owner's manual as its only source of truth. A Colab-hosted FastAPI service performs vector retrieval over a ChromaDB index built from a 360-page PDF, generates grounded answers with local Ollama models, and returns page-level citations plus manual page images. A zero-dependency static frontend presents this as a branded chat interface alongside a marketing site, vehicle configurator, and photo gallery.
 
+
+
+<img width="1919" height="944" alt="Screenshot 2026-09-15 173522" src="https://github.com/user-attachments/assets/d1f61c42-7de4-4d33-a795-3fd0af9da890" />
+<img width="1915" height="938" alt="Screenshot 2026-09-15 173536" src="https://github.com/user-attachments/assets/94d2879d-6fe6-4d3d-b02b-6e0facf22f96" />
+<img width="1919" height="942" alt="Screenshot 2026-09-15 173552" src="https://github.com/user-attachments/assets/0ffde9bb-d4ee-4cd7-9c1a-dd99bdef2b54" />
+<img width="1919" height="941" alt="Screenshot 2026-09-15 173558" src="https://github.com/user-attachments/assets/fde7be3f-4c6c-4cd6-a6a9-0ceca6d73f1b" />
+<img width="1919" height="944" alt="Screenshot 2026-09-15 173614" src="https://github.com/user-attachments/assets/6b958b25-ce8a-4743-bc63-7ce562f596d1" />
+<img width="1919" height="943" alt="Screenshot 2026-09-15 173624" src="https://github.com/user-attachments/assets/563804a5-2a05-4d76-b3bf-4f23f1f7fb5f" />
+<img width="1919" height="946" alt="Screenshot 2026-09-15 173510" src="https://github.com/user-attachments/assets/a758a453-3977-4093-91b1-269b2d75fb1b" />
+
 ## Demo & Showcase
 
 🎥 [Watch the Project Demo on YouTube](https://youtu.be/9py_2pVVLyA)
