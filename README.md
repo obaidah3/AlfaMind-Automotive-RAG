@@ -2,6 +2,13 @@
 
 A multimodal Retrieval-Augmented Generation (RAG) system that answers technical questions about the Alfa Romeo Giulia using the official owner's manual as its only source of truth. A Colab-hosted FastAPI service performs vector retrieval over a ChromaDB index built from a 360-page PDF, generates grounded answers with local Ollama models, and returns page-level citations plus manual page images. A zero-dependency static frontend presents this as a branded chat interface alongside a marketing site, vehicle configurator, and photo gallery.
 
+## Demo & Showcase
+
+🎥 [Watch the Project Demo on YouTube](https://youtu.be/9py_2pVVLyA)
+
+A video demonstration of the Alfa Romeo AI Assistant, showcasing its capabilities and user interaction.
+
+
 
 ---
 
