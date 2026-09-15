@@ -2,7 +2,6 @@
 
 A multimodal Retrieval-Augmented Generation (RAG) system that answers technical questions about the Alfa Romeo Giulia using the official owner's manual as its only source of truth. A Colab-hosted FastAPI service performs vector retrieval over a ChromaDB index built from a 360-page PDF, generates grounded answers with local Ollama models, and returns page-level citations plus manual page images. A zero-dependency static frontend presents this as a branded chat interface alongside a marketing site, vehicle configurator, and photo gallery.
 
-> **Scope note.** This README was reverse-engineered from the files present in this repository snapshot: `Giulia_RAG_manual.ipynb`, `app.js`, `index.html`, `home.html`, `configurator.html`, and `gallery.html`. Several files are *referenced* by that code but are not present in the snapshot (`styles.css`, `brand.css`, `nav.js`, `trim-data.js`, the `images/` tree, and the backend `main.py` as a standalone file). Statements about those files are marked **Not verified from repository**.
 
 ---
 
